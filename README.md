@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# One-Chan
+
+A simple 4channel clone.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
