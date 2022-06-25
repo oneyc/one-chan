@@ -14,7 +14,8 @@ import Home from './page/Home';
     High    
     Submit post will redirect user to "success screen" (in future, add failure screen for failed submission)
       if content available, then submit, else, prompt user to write something.
-    Page for individual thread
+    Clicking card leads user to individual thread
+    Link to Firebase
 
     Med
     Quote user reply

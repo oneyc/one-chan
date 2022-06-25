@@ -1,10 +1,17 @@
 import MainNavbar from "../components/MainNavbar"
 import {Container} from 'react-bootstrap';
 import { Outlet } from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 const TemplatePage = (props) => {
+    let navigate = useNavigate();
+    
+    useEffect(()=> {
+        console.log("Navigating to home")
+        return navigate("/home")
+    }, [])
 
     return(
         <React.Fragment>
@@ -13,7 +20,7 @@ const TemplatePage = (props) => {
             </header>
                 <Outlet></Outlet>
             <footer>
-                <div className='mt-5 py-5 bg-dark'>
+                <div className='py-5 bg-dark'>
                 <Container>
                     <p className='text-center text-white'>
                     Copyright &copy; One 2022

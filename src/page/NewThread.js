@@ -28,6 +28,7 @@ function NewThread() {
             </Form>
           </Row>
         </Container>
+        <div className="mb-5"></div>
       </body>
     </React.Fragment>
   );

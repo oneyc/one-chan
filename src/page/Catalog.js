@@ -21,6 +21,7 @@ const addNewThread = () => {
             <body>
                 <Intro onCreateNewThread={addNewThread}/>
                 <ListOfThreads/>
+                <div className="mb-5"></div>
             </body>
         </React.Fragment>
     )
