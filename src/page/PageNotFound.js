@@ -3,13 +3,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
 
 
-function PostSuccessful() {
+function PageNotFound() {
   return (
     <React.Fragment>
       <body>
         <Container>
           <Row>
-            <h1 className='text-center mt-5'>Post Submitted Successfully</h1>
+            <h1 className='text-center mt-5'>Page Not Found</h1>
           </Row>
         </Container>
       </body>
@@ -17,4 +17,4 @@ function PostSuccessful() {
   );
 }
 
-export default PostSuccessful;
+export default PageNotFound;
