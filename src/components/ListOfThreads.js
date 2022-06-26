@@ -1,24 +1,34 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState } from "react";
 import {Container, Col, Row, Card} from 'react-bootstrap';
 
-import postData from "../data/postData"
-import {collection, getDoc, getDocs} from 'firebase/firestore'
+import {collection, getDocs} from 'firebase/firestore'
 import { db } from "../lib/init-firebase";
-import { deepCopy } from "@firebase/util";
+import { useNavigate } from "react-router-dom";
 
-const ListOfThreads = () => {
+const ListOfThreads = (props) => {
 
+  let navigate = useNavigate();
   const [threads, setThreads] = useState([])
+  
+
+  const selectThread = (event) => {
+    console.log("Selected", event.target.id)
+    props.onGetId(event.target.id)
+    navigate(`../thread/${event.target.id}`, { replace: true })
+  }
+
   
   const getThreads = () => {
     try{
       const threadCollectionRef = collection(db, "threads");
       getDocs(threadCollectionRef)
-        .then(response => {
+        .then(
+          response => {
           const receivedData = response.docs.map(doc => ({
             data: doc.data(), 
             id: doc.id,
-          }))
+          }
+        ))
           setThreads(receivedData);
         })
         .catch(error =>{
@@ -30,14 +40,10 @@ const ListOfThreads = () => {
       console.log(error.message)
     }
   }
-
   useEffect(() => {
     getThreads()
   },[])
 
-  const selectThread = (event) => {
-    console.log("Selected", event.target.id)
-  }
 
   const listOfPost = threads.map((thread) => {
     console.log("Thread data", thread)
@@ -55,6 +61,7 @@ const ListOfThreads = () => {
       </Col>
     )});
 
+
   if(!threads.length){
     return(
       <Container>
@@ -64,7 +71,6 @@ const ListOfThreads = () => {
       </Container>
     )
   }
-
   return(
     <React.Fragment>
         <Container className=' threadsList'>

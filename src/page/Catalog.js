@@ -1,7 +1,5 @@
-import MainNavbar from "../components/MainNavbar"
 import Intro from "../components/Intro"
 import ListOfThreads from '../components/ListOfThreads';
-import {Container} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import React from "react";
 
@@ -16,11 +14,16 @@ const addNewThread = () => {
     navigate(path)
   }
 
+const getThreadId = (threadId) => {
+    console.log("Catalog", threadId);
+    props.ongetId(threadId)
+}
+
     return(
         <React.Fragment>
             <body>
                 <Intro onCreateNewThread={addNewThread}/>
-                <ListOfThreads/>
+                <ListOfThreads onGetId = {getThreadId} />
                 <div className="mb-5"></div>
             </body>
         </React.Fragment>

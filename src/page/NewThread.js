@@ -1,24 +1,57 @@
-import {Container, Row, Col, Button, Form} from 'react-bootstrap';
-import MainNavbar from "../components/MainNavbar"
+import React, { useState } from "react";
+import {Container, Row, Button, Form} from 'react-bootstrap';
 import SubmitFile from '../components/SubmitFile';
+import { doc, setDoc } from "firebase/firestore"; 
+import { db } from "../lib/init-firebase";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React from "react";
-
 
 function NewThread() {
+
+  const [title, setTitle] = useState("")
+  const [content, setContent] = useState("")
+
+  const setTitleToState = (event) => {setTitle(event.target.value)}
+  const setContentToState = (event) => {setContent(event.target.value)}
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("title", title)
+    console.log("content", content)
+    
+    submitToFirebase(title, content)
+  }
+
+  const submitToFirebase = async (titleText, contentText) => {
+    await setDoc(doc(db, "threads", makeid(20)),{
+      title: titleText,
+      thread: {post1:{content: contentText}},
+        })
+  }
+
+  function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
+
+
   return (
     <React.Fragment>
       <body>
         <Container>
           <Row>
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <Form.Group className='mt-5'>
                 <Form.Label className="fs-2">Title</Form.Label>
-                <Form.Control size="lg" placeholder="Enter Title"/>
+                <Form.Control id="title-field" size="lg" placeholder="Enter Title" as="input" value={title} onChange={setTitleToState} />
               </Form.Group>
               <Form.Group className="mt-3 mb-3">
                 <Form.Label className="fs-2">Content</Form.Label>
-                <Form.Control size="lg" placeholder="Your text here" as="textarea" rows={3}></Form.Control>
+                <Form.Control size="lg" placeholder="Your text here" as="textarea" rows={3} value={content} onChange={setContentToState} />
               </Form.Group>
               <Form.Group className="mt-3 mb-3">
                 <Form.Label className="fs-2">Select Image</Form.Label>
