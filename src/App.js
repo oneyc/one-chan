@@ -18,6 +18,7 @@ import Home from './page/Home';
     Link to Firebase
 
     Med
+    Clean up homepage
     Quote user reply
 
     Low
