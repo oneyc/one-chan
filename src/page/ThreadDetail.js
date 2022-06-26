@@ -1,14 +1,16 @@
 import {Container, Row, Col, Image, Form, Button} from 'react-bootstrap';
-import { useParams } from "react-router-dom";
+import { useParams, Navigate, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs ,setDoc } from "firebase/firestore";
 import { db } from "../lib/init-firebase";
 
 const TemplatePage = (props) => {
     let params = useParams()
+    const navigate = useNavigate();
 
     const [threads, setThreads] = useState([])
     const [replies, setReplies] = useState([])
+    const [newReplies, setNewReplies] = useState("")
 
     const getReplies = async() => {
         try{
@@ -40,6 +42,20 @@ const TemplatePage = (props) => {
         }
       }
     
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log()
+        //submitToFirebase(title, content);
+    }
+
+    //add reply, need work
+    const submitToFirebase = async (titleText, contentText) => {
+        await setDoc(doc(db, "threads/", params.threadId, "/replies"),{
+          reply: {post1:{content: contentText}},
+            })
+          navigate(`../success`, { replace: true })
+      }
+
     useEffect(()=>{
         getThreads()
         getReplies()
@@ -81,7 +97,7 @@ const TemplatePage = (props) => {
                 </Col>
             </Row>
             <Container>
-                {replies.length ? repliesList : <h3>No replies yet</h3>}
+                {replies.length ? repliesList : <h3 className='my-5'>No replies yet...</h3>}
                 <Form>
                     <Form.Group className="mb-3" controlId="formReply">
                         <Form.Label>Reply to this thread</Form.Label>

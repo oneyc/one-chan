@@ -4,20 +4,19 @@ import SubmitFile from '../components/SubmitFile';
 import { doc, setDoc } from "firebase/firestore"; 
 import { db } from "../lib/init-firebase";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from "react-router-dom";
 
 function NewThread() {
 
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
+  const navigate = useNavigate();
 
   const setTitleToState = (event) => {setTitle(event.target.value)}
   const setContentToState = (event) => {setContent(event.target.value)}
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("title", title)
-    console.log("content", content)
-    
     submitToFirebase(title, content)
   }
 
@@ -26,6 +25,7 @@ function NewThread() {
       title: titleText,
       thread: {post1:{content: contentText}},
         })
+      navigate(`../success`, { replace: true })
   }
 
   function makeid(length) {
