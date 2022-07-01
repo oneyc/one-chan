@@ -66,7 +66,7 @@ const ListOfThreads = (props) => {
     return(
       <Container>
         <Col>
-          <h3 class="text-center">Loading...</h3>
+          <h3 className="text-center">Loading...</h3>
         </Col>
       </Container>
     )

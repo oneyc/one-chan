@@ -12,11 +12,9 @@ import Home from './page/Home';
 
 /* TODO
     High    
-    Submit post will redirect user to "success screen" (in future, add failure screen for failed submission)
-      if content available, then submit, else, prompt user to write something.
-      redirect to success now
-    Add reply to thread (firebase)
+    If content available, then submit, else, prompt user to write something.
     Make sure credential is safe
+    Overflow at Catalog
 
     Med
     Clean up homepage

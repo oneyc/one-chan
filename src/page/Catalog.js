@@ -9,13 +9,11 @@ const Catalog = (props) => {
 const navigate = useNavigate();
 
 const addNewThread = () => {
-    console.log("AddNewThread clicked")
     let path = "/new-thread";
     navigate(path)
   }
 
 const getThreadId = (threadId) => {
-    console.log("Catalog", threadId);
     props.ongetId(threadId)
 }
 
