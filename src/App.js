@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useState } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Catalog from './page/Catalog';
 import TemplatePage from './page/TemplatePage';
@@ -18,12 +18,14 @@ import Home from './page/Home';
 
     Med
     Clean up homepage
-    Quote user reply
     sort thread by submitted time
+    Max no. of thread in catalog
+    Max no. of replies shown
+    Breadcrumb to allow user to go back to previous page
 
     Low
     Footer Position as Absolute
-    Breadcrumb to allow user to go back to previous page
+    Quote user reply
     check submission rule, like overwrite when id already exist
 
     More:
@@ -31,20 +33,14 @@ import Home from './page/Home';
 */
 
 function App() {
-  const[selectedThreadID, setSelectedThreadID] = useState("")
-
-  const getThreadId = (threadId) => {
-    console.log("App", threadId);
-    setSelectedThreadID(threadId)
-  }
 
   return (
       <Routes>
         <Route path="/" element={ <TemplatePage/> } >
-          <Route path="/home" key="/home" element={ <Home/> } />
-          <Route path="/catalog" key="/catalog" element={ <Catalog ongetId={getThreadId}/> } />
+          <Route index element={ <Home/> } />
+          <Route path="/catalog" key="/catalog" element={ <Catalog/> } />
           <Route path="/thread" key="/thread" element={ <ThreadMain/> }>
-            <Route path=":threadId" key=":threadId" element= { <ThreadDetail/>}></Route>
+            <Route path=":threadId" key="/:threadId" element= { <ThreadDetail/>}/>
           </Route>
           <Route path="/new-thread" key="/new-thread" element={ <NewThread/> } />
           <Route path="/success" key="/success" element={ <PostSuccessful/> } />

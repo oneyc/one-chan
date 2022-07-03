@@ -6,11 +6,15 @@ import { db } from "../lib/init-firebase";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from "react-router-dom";
 import makeid from "../data/makeId";
+import {storage} from '../lib/init-firebase'
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage"
 
 function NewThread() {
 
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
+  const [imgUrl, setImgURL] = useState(null);
+  const [progresspercent, setProgressPercentage] = useState(0);
   const navigate = useNavigate();
 
   const setTitleToState = (event) => {setTitle(event.target.value)}
@@ -19,6 +23,7 @@ function NewThread() {
   const handleSubmit = (event) => {
     event.preventDefault();
     submitToFirebase(title, content)
+    handleUpload(event)
   }
 
   const submitToFirebase = async (titleText, contentText) => {
@@ -27,6 +32,31 @@ function NewThread() {
       thread: {post1:{content: contentText}},
         })
       navigate(`../success`, { replace: true })
+  }
+
+  const handleUpload = (e) => {
+    const file = e.target[0]?.files[0]
+    if (!file){
+      alert("Choose a file first.")
+    }
+
+    const storageRef = ref(storage, `/files/${file.name}`)
+    const uploadTask = uploadBytesResumable(storageRef, file)
+
+    uploadTask.on('state_changed', (snapshot) => {
+      const progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes) * 100);
+      setProgressPercentage(progress);
+      console.log(progresspercent)
+    },
+    (error) => {
+      alert(error);
+    },
+    () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        setImgURL(downloadURL)
+        console.log(imgUrl)
+      });
+    })
   }
 
   return (

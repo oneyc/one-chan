@@ -21,7 +21,7 @@ const getThreadId = (threadId) => {
         <React.Fragment>
             <body>
                 <Intro onCreateNewThread={addNewThread}/>
-                <ListOfThreads onGetId = {getThreadId} />
+                <ListOfThreads />
                 <div className="mb-5"></div>
             </body>
         </React.Fragment>

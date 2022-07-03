@@ -5,11 +5,6 @@ import React from "react";
 
 
 const TemplatePage = (props) => {
-    
-    // useEffect(()=> {
-    //     console.log("Navigating to home")
-    //     return navigate("/home")
-    // }, [])
 
     return(
         <React.Fragment>

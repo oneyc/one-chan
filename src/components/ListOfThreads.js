@@ -13,7 +13,6 @@ const ListOfThreads = (props) => {
 
   const selectThread = (event) => {
     console.log("Selected", event.target.id)
-    props.onGetId(event.target.id)
     navigate(`../thread/${event.target.id}`, { replace: true })
   }
 

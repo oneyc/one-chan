@@ -15,16 +15,18 @@ const Home = () => {
         ></div>
                 <h1 style={{
                     position: 'absolute', 
-                    top: '10%', 
+                    top: '20%', 
                     left: '10%',
-                    color: 'white'
-                }} className='mt-5'>Home</h1>
+                    color: 'white',
+                    fontSize: '5rem'
+                }}>Home</h1>
                 <p style={{
                     position: 'absolute', 
-                    top: '15%', 
+                    top: '30%', 
                     left: '10%',
-                    color: 'white'
-                }} className='mt-5'>Welcome to One-Chan!</p>
+                    color: 'white',
+                    fontSize: '2rem'
+                }} >Welcome to One-Chan!</p>
     </React.Fragment>
     )
 
