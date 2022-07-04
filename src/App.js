@@ -11,8 +11,9 @@ import PageNotFound from './page/PageNotFound'
 import Home from './page/Home';
 
 /* TODO
-    High    
+    High
     If content available, then submit, else, prompt user to write something.
+    Clear data after posting
     Make sure credential is safe
     Overflow at Catalog
 
@@ -27,10 +28,7 @@ import Home from './page/Home';
     Footer Position as Absolute
     Quote user reply
     check submission rule, like overwrite when id already exist
-
-    More:
-    Allow Image Submission
-*/
+  */
 
 function App() {
 

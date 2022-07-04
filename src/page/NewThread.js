@@ -61,16 +61,16 @@ function NewThread() {
   }
 
   useEffect(()=>{
-    console.log("WTF state", imgUrl)
+    console.log("Current state", imgUrl)
     const submitData = async() => {
       await setDoc(doc(db, "threads", makeid(20)),{
         title: title,
         image: imgUrl,
-        thread: {post1:{content: content}},
+        content: content,
       });
       await navigate(`../success`, { replace: true });
     }
-    if(imgUrl != ""){
+    if(imgUrl !== ""){
       try{
         console.log("URL state data", imgUrl)
         submitData()

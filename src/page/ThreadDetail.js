@@ -1,22 +1,41 @@
 import {Container, Row, Col, Image, Form, Button} from 'react-bootstrap';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { collection, doc, getDoc,onSnapshot,setDoc, query, orderBy, serverTimestamp } from "firebase/firestore";
-import { db } from "../lib/init-firebase";
 import makeid from '../data/makeId';
+
+import { collection, doc, getDoc,onSnapshot,setDoc, query, orderBy, serverTimestamp } from "firebase/firestore";
+import { db, storage } from "../lib/init-firebase";
+import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage"
 
 const TemplatePage = (props) => {
     let params = useParams()
 
     const [threads, setThreads] = useState([])
     const [replies, setReplies] = useState([])
-    const [replyId, setReplyId] = useState([])
     const [newReply, setNewReply] = useState("")
+    const [imageUpload, setImageUpload] = useState(null)
+    const [imgUrl, setImgUrl] = useState("")
 
     useEffect(()=>{
         getThreads()
         getReplies()
     },[])
+    useEffect(()=> {
+        console.log("URL state", imgUrl)
+        const submitData = async() => {
+            const userReplyRef = doc(db, "threads/", params.threadId, "/replies/", makeid(20))
+            await setDoc(userReplyRef, {content: newReply, image: imgUrl, timestamp: serverTimestamp()})
+        }
+        if(imgUrl !== ""){
+            try{
+                submitData()
+              }
+              catch(e){
+                console.log(e)
+              }        
+            }
+    }, [imgUrl])
+
 
     const getReplies = async() => {
         try{
@@ -24,25 +43,24 @@ const TemplatePage = (props) => {
             const q = query(collectionOfReplies, orderBy("timestamp"))
             const querySnapshot = await onSnapshot(q, (querySnapshot) => {
                 setReplies(querySnapshot.docs.map((doc) => ({
-                    textpost: doc.data().textpost,
+                    content: doc.data().content,
                     timestamp: doc.data().timestamp}
                     )
                 ))
-            console.log(replies)
             })
             }
         catch(error){
             console.log(error)
         }
 
-}
+    }
     const getThreads = async() => {
         try{
           const threadRefDoc = doc(db, "threads/", params.threadId);
           const docSnap = await getDoc(threadRefDoc);
           if (docSnap.exists()) {
             setThreads({title: docSnap.data().title,
-                        textpost: docSnap.data().thread.post1.content})
+                        content: docSnap.data().content})
 
             console.log(docSnap.data())
           } else {
@@ -52,19 +70,42 @@ const TemplatePage = (props) => {
         catch(error){
           console.log(error.message)
         }
-      }
-    const submitToFirebase = async () => {
-        const userReplyRef = doc(db, "threads/", params.threadId, "/replies/", makeid(20))
-        await setDoc(userReplyRef, {textpost: newReply, timestamp: serverTimestamp()}
-        );
-      }
-
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        submitToFirebase()
     }
 
+
+    const handleUpload = () => {
+    if (!imageUpload){
+        setImgUrl(null)
+        return;
+    }
+        const imageRef = ref(storage, `/repliesImage/${makeid(8) + imageUpload.name}`);
+        const uploadTask = uploadBytesResumable(imageRef, imageUpload);
+
+        uploadTask.on('state_changed', snapshot => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is' + progress + "% done")
+            switch(snapshot.state){
+                case 'paused':
+                console.log("Upload is paused")
+                break
+                case 'running':
+                console.log('Upload is running');
+                break;
+            }
+        },
+        (error) => {
+        console.log(error)
+        },
+        () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            setImgUrl(url)
+        })
+        })
+    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        handleUpload()
+    }
     const handleChangeReply = (event) =>{
         setNewReply(event.target.value)
     }
@@ -77,7 +118,7 @@ const TemplatePage = (props) => {
                     <Image className="rounded" src="https://picsum.photos/100"></Image>
                 </Col>
                 <Col xs={7} md={10} className="pt-4 pb-4">
-                    {reply.textpost}
+                    {reply.content}
                 </Col>
             </Row>
         )
@@ -100,7 +141,7 @@ const TemplatePage = (props) => {
                     <Image className="rounded" src="https://picsum.photos/100"></Image>
                 </Col>
                 <Col xs={7} md={10} className="pt-4 pb-4">
-                    {threads.textpost}
+                    {threads.content}
                 </Col>
             </Row>
             <Container>
@@ -111,6 +152,9 @@ const TemplatePage = (props) => {
                         <Form.Control as="textarea" rows={3} value={newReply} onChange={handleChangeReply}/>
                         <Form.Text className="text-muted" >
                         </Form.Text>
+                        <div class="custom-file mt-3">
+                        <input type="file" class="custom-file-input" id="customFile" onChange={(event) => {setImageUpload(event.target.files[0])}}/>
+                        </div>
                     </Form.Group>
                     <Button variant="outline-dark" type="submit">
                         Submit

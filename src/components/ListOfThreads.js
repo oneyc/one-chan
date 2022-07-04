@@ -53,7 +53,7 @@ const ListOfThreads = (props) => {
           <Card.Body id={thread.id}>
             <Card.Title id={thread.id}>{thread.data.title && thread.data.title}</Card.Title>
             <Card.Text id={thread.id}>
-              {thread.data.thread && thread.data.thread.post1.content}
+              {thread.data.content && thread.data.content}
             </Card.Text>
           </Card.Body>
         </Card>
