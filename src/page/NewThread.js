@@ -1,63 +1,85 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {Container, Row, Button, Form} from 'react-bootstrap';
-import SubmitFile from '../components/SubmitFile';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import makeid from "../data/makeId";
+import {v4} from 'uuid';
+
 import { doc, setDoc } from "firebase/firestore"; 
 import { db } from "../lib/init-firebase";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from "react-router-dom";
-import makeid from "../data/makeId";
 import {storage} from '../lib/init-firebase'
-import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage"
+import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage"
+
 
 function NewThread() {
 
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
-  const [imgUrl, setImgURL] = useState(null);
-  const [progresspercent, setProgressPercentage] = useState(0);
+  const [imageUpload, setImageUpload] = useState(null)
+  const [imgUrl, setImgUrl] = useState("")
+
   const navigate = useNavigate();
 
   const setTitleToState = (event) => {setTitle(event.target.value)}
   const setContentToState = (event) => {setContent(event.target.value)}
 
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    submitToFirebase(title, content)
-    handleUpload(event)
+    handleUpload()
   }
 
-  const submitToFirebase = async (titleText, contentText) => {
-    await setDoc(doc(db, "threads", makeid(20)),{
-      title: titleText,
-      thread: {post1:{content: contentText}},
+  const handleUpload = () => {
+      if (!imageUpload){
+        setImgUrl(null)
+        return;
+      }
+        const imageRef = ref(storage, `/threadImage/${imageUpload.name + v4()}`);
+        const uploadTask = uploadBytesResumable(imageRef, imageUpload);
+  
+        uploadTask.on('state_changed', snapshot => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is' + progress + "% done")
+          switch(snapshot.state){
+            case 'paused':
+              console.log("Upload is paused")
+              break
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          console.log(error)
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            console.log('File available at', url);
+            setImgUrl(url)
+          })
         })
-      navigate(`../success`, { replace: true })
   }
 
-  const handleUpload = (e) => {
-    const file = e.target[0]?.files[0]
-    if (!file){
-      alert("Choose a file first.")
-    }
-
-    const storageRef = ref(storage, `/files/${file.name}`)
-    const uploadTask = uploadBytesResumable(storageRef, file)
-
-    uploadTask.on('state_changed', (snapshot) => {
-      const progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes) * 100);
-      setProgressPercentage(progress);
-      console.log(progresspercent)
-    },
-    (error) => {
-      alert(error);
-    },
-    () => {
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        setImgURL(downloadURL)
-        console.log(imgUrl)
+  useEffect(()=>{
+    console.log("WTF state", imgUrl)
+    const submitData = async() => {
+      await setDoc(doc(db, "threads", makeid(20)),{
+        title: title,
+        image: imgUrl,
+        thread: {post1:{content: content}},
       });
-    })
-  }
+      await navigate(`../success`, { replace: true });
+    }
+    if(imgUrl != ""){
+      try{
+        console.log("URL state data", imgUrl)
+        submitData()
+      }
+      catch(e){
+        console.log(e)
+      }
+    }
+  }, [imgUrl])
 
   return (
     <React.Fragment>
@@ -75,7 +97,9 @@ function NewThread() {
               </Form.Group>
               <Form.Group className="mt-3 mb-3">
                 <Form.Label className="fs-2">Select Image</Form.Label>
-                <SubmitFile/>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="customFile" onChange={(event) => {setImageUpload(event.target.files[0])}}/>
+                </div>
               </Form.Group>
               <Button className="mt-3 mb-3" size="lg" variant="outline-dark" type="submit">Submit Post</Button>
             </Form>
