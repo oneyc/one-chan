@@ -49,7 +49,7 @@ const ListOfThreads = (props) => {
     return(      
       <Col>
         <Card onClick={selectThread} key={thread.id} id={thread.id}>
-          <Card.Img variant="top" src="https://picsum.photos/200" id={thread.id}/>
+          <Card.Img variant="top" src={thread.data.image} id={thread.id}/>
           <Card.Body id={thread.id}>
             <Card.Title id={thread.id}>{thread.data.title && thread.data.title}</Card.Title>
             <Card.Text id={thread.id}>

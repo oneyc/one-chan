@@ -44,7 +44,8 @@ const TemplatePage = (props) => {
             const querySnapshot = await onSnapshot(q, (querySnapshot) => {
                 setReplies(querySnapshot.docs.map((doc) => ({
                     content: doc.data().content,
-                    timestamp: doc.data().timestamp}
+                    timestamp: doc.data().timestamp,
+                    image: doc.data().image}
                     )
                 ))
             })
@@ -60,7 +61,8 @@ const TemplatePage = (props) => {
           const docSnap = await getDoc(threadRefDoc);
           if (docSnap.exists()) {
             setThreads({title: docSnap.data().title,
-                        content: docSnap.data().content})
+                        content: docSnap.data().content,
+                        image: docSnap.data().image})
 
             console.log(docSnap.data())
           } else {
@@ -113,11 +115,12 @@ const TemplatePage = (props) => {
 
     const repliesList = replies.map((reply) => {
         return(
-            <Row className="border border-secondary rounded my-3">
-                <Col xs={5} md="auto" className=" p-4">
-                    <Image className="rounded" src="https://picsum.photos/100"></Image>
+            <Row className="rounded my-3" style={{backgroundColor: "rgba(0,0,0,0.2)"}}>
+                <Col xs="auto" sm="auto" className="">
+                    {reply.image && <Image className="rounded mx-2 my-4" style={{height: "100px"}} src={reply.image}></Image>}
                 </Col>
-                <Col xs={7} md={10} className="pt-4 pb-4">
+                <Col xs="auto" sm="auto" className=" mx-2 my-4">
+                    {console.log(reply)}
                     {reply.content}
                 </Col>
             </Row>
@@ -136,11 +139,11 @@ const TemplatePage = (props) => {
     return(
         <React.Fragment>
             <h1>{threads.title}</h1>
-            <Row className="border border-secondary rounded my-3">
-                <Col xs={5} md="auto" className=" p-4">
+            <Row className="rounded my-3" style={{backgroundColor: "grey"}}>
+                <Col xs={5} sm="auto" className=" p-4">
                     <Image className="rounded" src="https://picsum.photos/100"></Image>
                 </Col>
-                <Col xs={7} md={10} className="pt-4 pb-4">
+                <Col xs={5} sm={5} className="pt-4 pb-4">
                     {threads.content}
                 </Col>
             </Row>

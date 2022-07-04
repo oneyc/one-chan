@@ -12,8 +12,8 @@ const TemplatePage = (props) => {
                 <MainNavbar/>
             </header>
                 <Outlet></Outlet>
-            <footer>
-                <div className='py-5 bg-dark'>
+            <footer style={{position:"absolute", bottom: "0", left: "0", width: "100vw"}}>
+                <div className='py-5 bg-dark' >
                 <Container>
                     <p className='text-center text-white'>
                     Copyright &copy; One 2022

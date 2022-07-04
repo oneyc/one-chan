@@ -26,14 +26,20 @@ function NewThread() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    handleUpload()
+    if (!imageUpload){
+      alert("New thread must have an image");
+      return;
+    }
+    else{
+      handleUpload()
+    }
   }
 
   const handleUpload = () => {
-      if (!imageUpload){
-        setImgUrl(null)
-        return;
-      }
+      // if (!imageUpload){
+      //   alert("New thread must have an image");
+      //   return;
+      // }
         const imageRef = ref(storage, `/threadImage/${imageUpload.name + v4()}`);
         const uploadTask = uploadBytesResumable(imageRef, imageUpload);
   
