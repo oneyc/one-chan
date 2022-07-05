@@ -12,11 +12,11 @@ import Home from './page/Home';
 
 /* TODO
     High
-    If content available, then submit, else, prompt user to write something.
     Clear data after posting
     Make sure credential is safe
     Overflow at Catalog
-
+    Sort by timestamp
+    
     Med
     Clean up homepage
     sort thread by submitted time

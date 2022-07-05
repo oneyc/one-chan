@@ -26,6 +26,9 @@ const TemplatePage = (props) => {
             const userReplyRef = doc(db, "threads/", params.threadId, "/replies/", makeid(20))
             await setDoc(userReplyRef, {content: newReply, image: imgUrl, timestamp: serverTimestamp()})
         }
+        if(newReply.length == 0){
+            return;
+        }
         if(imgUrl !== ""){
             try{
                 submitData()
@@ -76,6 +79,10 @@ const TemplatePage = (props) => {
 
 
     const handleUpload = () => {
+    if(newReply.length == 0){
+        alert("Reply cannot be empty");
+        return;
+    }
     if (!imageUpload){
         setImgUrl(null)
         return;
@@ -115,7 +122,8 @@ const TemplatePage = (props) => {
 
     const repliesList = replies.map((reply) => {
         return(
-            <Row className="rounded my-3" style={{backgroundColor: "rgba(0,0,0,0.2)"}}>
+            <Row className="rounded my-3" style={{backgroundColor: "rgb(160, 160, 160)" ,
+            boxShadow: "0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}>
                 <Col xs="auto" sm="auto" className="">
                     {reply.image && <Image className="rounded mx-2 my-4" style={{height: "100px"}} src={reply.image}></Image>}
                 </Col>
@@ -139,12 +147,13 @@ const TemplatePage = (props) => {
     return(
         <React.Fragment>
             <h1>{threads.title}</h1>
-            <Row className="rounded my-3" style={{backgroundColor: "grey"}}>
-                <Col xs={5} sm="auto" className=" p-4">
-                    <Image className="rounded" src="https://picsum.photos/100"></Image>
+            <Row className="rounded my-3" style={{backgroundColor: "rgb(50, 50, 50)" ,
+            boxShadow: "0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}>
+                <Col xs="auto" sm="auto" className=" p-4">
+                    {threads.image && <Image className="rounded" style={{height: "200px"}} src={threads.image}></Image>}
                 </Col>
-                <Col xs={5} sm={5} className="pt-4 pb-4">
-                    {threads.content}
+                <Col xs="auto" sm="auto" className="pt-4 pb-4">
+                    <p style={{color: "rgb(255, 255, 255)"}}>{threads.content}</p>
                 </Col>
             </Row>
             <Container>

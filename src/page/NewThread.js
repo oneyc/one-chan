@@ -5,10 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import makeid from "../data/makeId";
 import {v4} from 'uuid';
 
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, serverTimestamp } from "firebase/firestore"; 
 import { db } from "../lib/init-firebase";
 import {storage} from '../lib/init-firebase'
-import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage"
+import {ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 
 
 function NewThread() {
@@ -26,6 +26,14 @@ function NewThread() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if(title.length == 0){
+      alert("New thread must have a title");
+      return;
+    }
+    if(content.length == 0){
+      alert("New thread must have written content");
+      return;
+    }
     if (!imageUpload){
       alert("New thread must have an image");
       return;
@@ -73,6 +81,7 @@ function NewThread() {
         title: title,
         image: imgUrl,
         content: content,
+        timestamp: serverTimestamp(),
       });
       await navigate(`../success`, { replace: true });
     }
