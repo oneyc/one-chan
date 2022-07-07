@@ -1,8 +1,7 @@
 # One-Chan
 
-A simple 4channel clone.
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## About
+One-Chan is a simple 4channel clone built on top of ReactJS and Firebase.
 
 ## Available Scripts
 
