@@ -22,9 +22,21 @@ const TemplatePage = (props) => {
     },[])
     useEffect(()=> {
         console.log("URL state", imgUrl)
+        const clearState = async() => {
+
+        }
+
         const submitData = async() => {
             const userReplyRef = doc(db, "threads/", params.threadId, "/replies/", makeid(20))
-            await setDoc(userReplyRef, {content: newReply, image: imgUrl, timestamp: serverTimestamp()})
+            const sendReply = await setDoc(userReplyRef, {content: newReply, image: imgUrl, timestamp: serverTimestamp()})
+                .then(sendReply => {
+                    setImageUpload(null);
+                    setImgUrl("");
+                    setNewReply([]);
+                    console.log("State Cleared!")
+                    }         
+                )
+                .catch(e => console.log(e))
         }
         if(newReply.length == 0){
             return;

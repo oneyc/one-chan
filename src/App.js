@@ -12,14 +12,12 @@ import Home from './page/Home';
 
 /* TODO
     High
-    Clear data after posting
     Make sure credential is safe
     Overflow at Catalog
     Sort by timestamp
+    Loading when upload
     
     Med
-    Clean up homepage
-    sort thread by submitted time
     Max no. of thread in catalog
     Max no. of replies shown
     Breadcrumb to allow user to go back to previous page
