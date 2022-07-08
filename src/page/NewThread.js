@@ -17,6 +17,7 @@ function NewThread() {
   const [content, setContent] = useState("")
   const [imageUpload, setImageUpload] = useState(null)
   const [imgUrl, setImgUrl] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate();
 
@@ -26,11 +27,11 @@ function NewThread() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(title.length == 0){
+    if(title.length === 0){
       alert("New thread must have a title");
       return;
     }
-    if(content.length == 0){
+    if(content.length === 0){
       alert("New thread must have written content");
       return;
     }
@@ -39,15 +40,12 @@ function NewThread() {
       return;
     }
     else{
+      setLoading(true)
       handleUpload()
     }
   }
 
   const handleUpload = () => {
-      // if (!imageUpload){
-      //   alert("New thread must have an image");
-      //   return;
-      // }
         const imageRef = ref(storage, `/threadImage/${imageUpload.name + v4()}`);
         const uploadTask = uploadBytesResumable(imageRef, imageUpload);
   
@@ -70,6 +68,7 @@ function NewThread() {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             console.log('File available at', url);
             setImgUrl(url)
+            //activate useeffect
           })
         })
   }
@@ -82,8 +81,10 @@ function NewThread() {
         image: imgUrl,
         content: content,
         timestamp: serverTimestamp(),
+        latest_activity: serverTimestamp(),
       });
       await navigate(`../success`, { replace: true });
+      setLoading(false);
     }
     if(imgUrl !== ""){
       try{
@@ -116,7 +117,9 @@ function NewThread() {
                   <input type="file" class="custom-file-input" id="customFile" onChange={(event) => {setImageUpload(event.target.files[0])}}/>
                 </div>
               </Form.Group>
-              <Button className="mt-3 mb-3" size="lg" variant="outline-dark" type="submit">Submit Post</Button>
+              {loading === true && <Button className="mt-3 mb-3" size="lg" variant="outline-dark" type="submit" disabled>Submitting...</Button>}
+              {loading === false && <Button className="mt-3 mb-3" size="lg" variant="outline-dark" type="submit">Submit Post</Button>}
+
             </Form>
           </Row>
         </Container>

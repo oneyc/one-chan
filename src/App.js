@@ -12,10 +12,7 @@ import Home from './page/Home';
 
 /* TODO
     High
-    Make sure credential is safe
-    Overflow at Catalog
-    Sort by timestamp
-    Loading when upload
+    New post push thread forward    
     
     Med
     Max no. of thread in catalog

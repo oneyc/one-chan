@@ -14,7 +14,6 @@ const ListOfThreads = (props) => {
   
 
   const selectThread = (event) => {
-    console.log("Selected", event.target.id)
     navigate(`../thread/${event.target.id}`, { replace: true })
   }
 
@@ -22,7 +21,7 @@ const ListOfThreads = (props) => {
   const getThreads = () => {
     try{
       const threadCollectionRef = collection(db, "threads");
-      const q = query(threadCollectionRef, orderBy("timestamp", "desc"))
+      const q = query(threadCollectionRef, orderBy("latest_activity", "desc"))
       getDocs(q)
         .then(
           response => {

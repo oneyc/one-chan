@@ -3,47 +3,61 @@ import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import makeid from '../data/makeId';
 
-import { collection, doc, getDoc,onSnapshot,setDoc, query, orderBy, serverTimestamp } from "firebase/firestore";
+import { collection, doc, getDoc,onSnapshot,setDoc, query, orderBy, serverTimestamp, runTransaction } from "firebase/firestore";
 import { db, storage } from "../lib/init-firebase";
 import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage"
 
 const TemplatePage = (props) => {
     let params = useParams()
 
-    const [threads, setThreads] = useState([])
-    const [replies, setReplies] = useState([])
-    const [newReply, setNewReply] = useState("")
-    const [imageUpload, setImageUpload] = useState(null)
-    const [imgUrl, setImgUrl] = useState("")
+    const [threads, setThreads] = useState([]);
+    const [replies, setReplies] = useState([]);
+    const [newReply, setNewReply] = useState("");
+    const [imageUpload, setImageUpload] = useState(null);
+    const [imgUrl, setImgUrl] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
         getThreads()
         getReplies()
     },[])
     useEffect(()=> {
-        console.log("URL state", imgUrl)
-        const clearState = async() => {
-
-        }
-
         const submitData = async() => {
             const userReplyRef = doc(db, "threads/", params.threadId, "/replies/", makeid(20))
-            const sendReply = await setDoc(userReplyRef, {content: newReply, image: imgUrl, timestamp: serverTimestamp()})
-                .then(sendReply => {
+            const updateLatestActivity = await setDoc(userReplyRef, {content: newReply, image: imgUrl, timestamp: serverTimestamp()})
+                .then(updateLatestActivity => {
+                    setLoading(false)
                     setImageUpload(null);
                     setImgUrl("");
                     setNewReply([]);
                     console.log("State Cleared!")
                     }         
                 )
-                .catch(e => console.log(e))
+                .catch(e =>console.log("Sending reply failed: ", e))
         }
-        if(newReply.length == 0){
+        const changeTimestamp = async() => {
+            const threadRefDoc = doc(db, "threads/", params.threadId);
+            try {
+                await runTransaction(db, async (transaction) => {
+                const threadDoc = await transaction.get(threadRefDoc);
+                if (!threadDoc.exists()) {
+                    throw "Document does not exist!";
+                }
+                const latestActivity = serverTimestamp()
+                transaction.update(threadRefDoc, { latest_activity: latestActivity });
+                });
+            } catch (e) {
+                console.log("Transaction failed: ", e);
+            }
+        }
+
+        if(newReply.length === 0){
             return;
         }
         if(imgUrl !== ""){
             try{
                 submitData()
+                changeTimestamp()
               }
               catch(e){
                 console.log(e)
@@ -79,7 +93,6 @@ const TemplatePage = (props) => {
                         content: docSnap.data().content,
                         image: docSnap.data().image})
 
-            console.log(docSnap.data())
           } else {
             console.log("No such document!");
           }
@@ -91,7 +104,7 @@ const TemplatePage = (props) => {
 
 
     const handleUpload = () => {
-    if(newReply.length == 0){
+    if(newReply.length === 0){
         alert("Reply cannot be empty");
         return;
     }
@@ -125,6 +138,7 @@ const TemplatePage = (props) => {
     }
     const handleSubmit = (event) => {
         event.preventDefault();
+        setLoading(true)
         handleUpload()
     }
     const handleChangeReply = (event) =>{
@@ -140,7 +154,6 @@ const TemplatePage = (props) => {
                     {reply.image && <Image className="rounded mx-2 my-4" style={{height: "100px"}} src={reply.image}></Image>}
                 </Col>
                 <Col xs="auto" sm="auto" className=" mx-2 my-4">
-                    {console.log(reply)}
                     {reply.content}
                 </Col>
             </Row>
@@ -151,7 +164,7 @@ const TemplatePage = (props) => {
     if(Object.keys(threads).length === 0){
         return(
             <Col>
-            <h3 class="text-center">Loading...</h3>
+            <h3 className="text-center">Loading...</h3>
             <div className="mb-5"></div>
             </Col>
         )   
@@ -176,13 +189,16 @@ const TemplatePage = (props) => {
                         <Form.Control as="textarea" rows={3} value={newReply} onChange={handleChangeReply}/>
                         <Form.Text className="text-muted" >
                         </Form.Text>
-                        <div class="custom-file mt-3">
-                        <input type="file" class="custom-file-input" id="customFile" onChange={(event) => {setImageUpload(event.target.files[0])}}/>
+                        <div className="custom-file mt-3">
+                        <input type="file" className="custom-file-input" id="customFile" onChange={(event) => {setImageUpload(event.target.files[0])}}/>
                         </div>
                     </Form.Group>
-                    <Button variant="outline-dark" type="submit">
+                    {loading === false && <Button variant="outline-dark" type="submit">
                         Submit
-                    </Button>
+                    </Button>}
+                    {loading === true && <Button variant="outline-dark" type="submit" disabled>
+                        Submitting...
+                    </Button>}
                 </Form>
             </Container>
             <div className="mb-5"></div>
