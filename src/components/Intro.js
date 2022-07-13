@@ -9,8 +9,13 @@ const Intro = (props) => {
             <Image src="https://picsum.photos/700/300" fluid></Image>
           </Col>
           <Col className="">
-            <h1 className="my-2">Current Board</h1>
-            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+            <h1 className="my-2">Sample Board</h1>
+            <p>Welcome to OneChannel, the anonymous imageboard! Account is not required to participate in the community. Feel free to click on any thread and jump right in!</p>
+            <h6>Rules:</h6>
+            <ul>
+              <li>1. Be civil</li>
+              <li>1. Have fun!</li>
+            </ul>
             <Button variant="outline-dark" onClick={props.onCreateNewThread}>Start A New Thread</Button>{' '}
           </Col>
         </Row>

@@ -11,9 +11,12 @@ const TemplatePage = (props) => {
             <header>
                 <MainNavbar/>
             </header>
+            <section style={{minHeight: '80vh'}}>
                 <Outlet></Outlet>
+            </section>
             <footer>
-                <div className='py-5 bg-dark' >
+                <div className='py-5 bg-dark' 
+                style={{marginTop: 'auto'}}>
                 <Container>
                     <p className='text-center text-white'>
                     Copyright &copy; One 2022

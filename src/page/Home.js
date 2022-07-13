@@ -18,10 +18,10 @@ const Home = () => {
         }}>Home</h1>
         <p style={{
             position: 'absolute', 
-            top: '30%', 
+            top: '32%', 
             left: '10%',
             color: 'white',
-            fontSize: '2rem'
+            fontSize: '1.8rem'
         }} >Welcome to One-Chan!</p>
         <div
             className="bg"

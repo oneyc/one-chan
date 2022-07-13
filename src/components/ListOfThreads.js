@@ -48,12 +48,14 @@ const ListOfThreads = (props) => {
   const listOfPost = threads.map((thread) => {
     return(      
       <Col >
-        <Card onClick={selectThread} key={thread.id} id={thread.id} timestamp={thread.data.timestamp} style={{boxShadow: "0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", maxHeight:"500px", overflow:"hidden"}}>
+        <Card onClick={selectThread} key={thread.id} id={thread.id} timestamp={thread.data.timestamp} 
+              style={{boxShadow: "0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", mixHeight:"400px",  
+              maxHeight:"500px", overflow:"hidden", cursor: "pointer"}}>
           <Ratio aspectRatio="1x1">
           <Card.Img style={{objectFit: "cover"}} variant="top" src={thread.data.image} id={thread.id}/>
           </Ratio>
           <Card.Body id={thread.id}>
-            <Card.Title id={thread.id}>{thread.data.title && thread.data.title}</Card.Title>
+            <Card.Title id={thread.id} style={{whiteSpace: "noWrap", overflow: "hidden"}}>{thread.data.title && thread.data.title}</Card.Title>
             <Card.Text id={thread.id} className={"overflow-hidden"}>
               {thread.data.content && thread.data.content}
             </Card.Text>

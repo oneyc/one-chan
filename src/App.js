@@ -12,8 +12,7 @@ import Home from './page/Home';
 
 /* TODO
     High
-    New post push thread forward    
-    
+    Image as thumbnail
     Med
     Max no. of thread in catalog
     Max no. of replies shown
