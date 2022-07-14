@@ -10,7 +10,7 @@ const Intro = (props) => {
           </Col>
           <Col className="">
             <h1 className="my-2">Sample Board</h1>
-            <p>Welcome to OneChannel, the anonymous imageboard! Account is not required to participate in the community. Feel free to click on any thread and jump right in!</p>
+            <p>Welcome to One-Channel, the anonymous imageboard! Account is not required to participate in the community. Feel free to click on any thread and jump right in!</p>
             <h6>Rules:</h6>
             <ul>
               <li>1. Be civil</li>
