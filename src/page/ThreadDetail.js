@@ -1,7 +1,11 @@
 import {Container, Row, Col, Image, Form, Button} from 'react-bootstrap';
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import Replies from '../components/Replies';
+import FirstPost from '../components/FirstPost';
+import Breadcrumbs from '../components/Breadcrumbs';
 import makeid from '../data/makeId';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 import { collection, doc, getDoc,onSnapshot,setDoc, query, orderBy, serverTimestamp, runTransaction } from "firebase/firestore";
 import { db, storage } from "../lib/init-firebase";
@@ -74,8 +78,8 @@ const TemplatePage = (props) => {
                 setReplies(querySnapshot.docs.map((doc) => ({
                     content: doc.data().content,
                     timestamp: doc.data().timestamp,
-                    image: doc.data().image}
-                    )
+                    image: doc.data().image,
+                })                    
                 ))
             })
             }
@@ -91,8 +95,9 @@ const TemplatePage = (props) => {
           if (docSnap.exists()) {
             setThreads({title: docSnap.data().title,
                         content: docSnap.data().content,
-                        image: docSnap.data().image})
-
+                        image: docSnap.data().image,
+                        timestamp: docSnap.data().timestamp,
+                    })
           } else {
             console.log("No such document!");
           }
@@ -101,7 +106,7 @@ const TemplatePage = (props) => {
           console.log(error.message)
         }
     }
-
+    
 
     const handleUpload = () => {
     if(newReply.length === 0){
@@ -148,40 +153,24 @@ const TemplatePage = (props) => {
 
     const repliesList = replies.map((reply) => {
         return(
-            <Row className="rounded my-3" style={{backgroundColor: "rgb(160, 160, 160)" ,
-            boxShadow: "0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}>
-                <Col xs="auto" sm="auto" className="">
-                    {reply.image && <Image className="rounded mx-2 my-4" style={{height: "100px"}} src={reply.image}></Image>}
-                </Col>
-                <Col xs="auto" sm="auto" className=" mx-2 my-4">
-                    {reply.content}
-                </Col>
-            </Row>
+            <Replies reply={reply}/>
         )
     })
 
 
     if(Object.keys(threads).length === 0){
         return(
-            <Col>
-            <h3 className="text-center">Loading...</h3>
-            <div className="mb-5"></div>
+            <Col style={{display: 'flex', justifyContent: 'center'}}>
+              <LoadingSpinner/>
             </Col>
         )   
     }
     return(
         <React.Fragment>
-            <h1>{threads.title}</h1>
-            <Row className="rounded my-3" style={{backgroundColor: "rgb(50, 50, 50)" ,
-            boxShadow: "0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}>
-                <Col xs="auto" sm="auto" className=" p-4">
-                    {threads.image && <Image className="rounded" style={{height: "200px"}} src={threads.image}></Image>}
-                </Col>
-                <Col xs="auto" sm="auto" className="pt-4 pb-4">
-                    <p style={{color: "rgb(255, 255, 255)"}}>{threads.content}</p>
-                </Col>
-            </Row>
-            <Container>
+            <div style={{padding: '0px'}}>
+                <Breadcrumbs threads={threads}/>
+                <h1>{threads.title}</h1>
+                <FirstPost threads={threads} />
                 {replies.length ? repliesList : <h3 className='my-5'>No replies yet...</h3>}
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formReply">
@@ -200,7 +189,7 @@ const TemplatePage = (props) => {
                         Submitting...
                     </Button>}
                 </Form>
-            </Container>
+            </div>
             <div className="mb-5"></div>
         </React.Fragment>
     )

@@ -13,10 +13,6 @@ const addNewThread = () => {
     navigate(path)
   }
 
-const getThreadId = (threadId) => {
-    props.ongetId(threadId)
-}
-
     return(
         <React.Fragment>
                 <Intro onCreateNewThread={addNewThread}/>

@@ -6,7 +6,7 @@ const Intro = (props) => {
       <Container className="mb-5">
         <Row className="my-5">
           <Col sm={7} className="">
-            <Image src="https://picsum.photos/700/300" fluid></Image>
+            <Image style={{width: '100%', height: "auto"}} src="https://picsum.photos/700/300" fluid></Image>
           </Col>
           <Col className="">
             <h1 className="my-2">Sample Board</h1>
