@@ -15,7 +15,7 @@ const Home = () => {
     <React.Fragment>
         <div
             className="bg-image"
-            style={{ position: 'relative', backgroundImage: "url('/pexels-cátia-matos-1072179.jpg')", objectFit: "contain", width:'100vw', height: "85vh", zIndex:1}}
+            style={{ position: 'relative', backgroundImage: "url('/pexels-cátia-matos-1072179.jpg')", objectFit: "contain", width:'100%', height: "85vh", zIndex:1}}
         >
             <div className="container" 
             style={{display: 'flex', flexDirection: 'column', textAlign: 'center', height: '100%',alignContent: 'center', justifyContent: 'center'}}
