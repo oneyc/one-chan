@@ -7,16 +7,13 @@ import React from "react";
 const TemplatePage = (props) => {
 
     return(
-        <React.Fragment>
+        <div style={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
             <header>
                 <MainNavbar/>
             </header>
-            <section style={{minHeight: '80vh'}}>
                 <Outlet></Outlet>
-            </section>
-            <footer>
-                <div className='py-5 bg-dark' 
-                style={{marginTop: 'auto'}}>
+            <footer style={{marginTop: 'auto'}}>
+                <div className='py-5 bg-dark' >
                 <Container>
                     <p className='text-center text-white'>
                     Copyright &copy; One 2022
@@ -24,7 +21,7 @@ const TemplatePage = (props) => {
                 </Container>
                 </div>
             </footer>
-        </React.Fragment>
+        </div>
     )
 }
 

@@ -4,6 +4,7 @@ import {Container, Row, Button, Form} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import makeid from "../data/makeId";
 import {v4} from 'uuid';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"; 
 import { db } from "../lib/init-firebase";

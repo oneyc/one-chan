@@ -1,0 +1,43 @@
+.cards{
+    background-color: white;
+    height: 450px;
+    overflow: hidden;
+    border-radius: 1rem;
+    cursor:pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: box-shadow 0.3s;
+}
+
+.cards:hover{
+    box-shadow: 0 7px 14px rgba(0,0,0,0.25), 0 3px 3px rgba(0,0,0,0.22);
+}
+
+.cardsBody{
+    background-color: rgba(0,0,0,0.1);
+}
+
+.cardsText{
+    color:rgba(0,0,0,0.7);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+}
+
+
+@media (max-width: 1400px){
+    .cards{
+        height: 400px;
+    }
+}
+@media (max-width: 1000px){
+    .cards{
+        height: 360px;
+    }
+}
+@media (max-width: 575px){
+    .cards{
+        height: 410px;
+    }
+}

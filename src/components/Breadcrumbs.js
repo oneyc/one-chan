@@ -7,7 +7,7 @@ const Breadcrumbs = (props) => {
         <Breadcrumb.Item href="../catalog">
           Catalog
         </Breadcrumb.Item>
-        <Breadcrumb.Item active>{props.threads.title}</Breadcrumb.Item>
+        <Breadcrumb.Item active>{props.threads ? props.threads.title : "Wut"}</Breadcrumb.Item>
       </Breadcrumb>
     );
   }

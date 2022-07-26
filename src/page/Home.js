@@ -1,30 +1,32 @@
 import React from "react";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
 
 const Home = () => {
+    let navigate = useNavigate();
+
+    const selectThread = (event) => {
+        console.log("Check");
+        navigate(`../catalog`, { replace: true });
+      }
+
     return(
     <React.Fragment>
-        <h1 style={{
-            position: 'absolute', 
-            top: '20%', 
-            left: '10%',
-            color: 'white',
-            fontSize: '5rem'
-        }}>Home</h1>
-        <p style={{
-            position: 'absolute', 
-            top: '32%', 
-            left: '10%',
-            color: 'white',
-            fontSize: '1.7rem'
-        }} >Welcome to One-Channel!</p>
-        <div
-            className="bg"
-            style={{ position: 'absolute', backgroundColor: "rgba(0,0,0,0.5)", width:'100vw' ,height: "100vh", zIndex:-1}}
-        ></div>
         <div
             className="bg-image"
-            style={{ position: 'relative', backgroundImage: "url('https://picsum.photos/1920/1080')", height: "100vh", zIndex:-2}}
-        ></div>
+            style={{ position: 'relative', backgroundImage: "url('/pexels-cátia-matos-1072179.jpg')", objectFit: "contain", width:'100vw', height: "85vh", zIndex:1}}
+        >
+            <div className="container" 
+            style={{display: 'flex', flexDirection: 'column', textAlign: 'center', height: '100%',alignContent: 'center', justifyContent: 'center'}}
+            >
+                <h1 style={{ fontSize:"5rem", color: "whitesmoke"}}>Home</h1>
+                <p style={{ fontSize:"1.5rem", color: "lightgray"}}>Welcome to One-Channel!</p>
+                <Button size="lg" variant="outline-light" onClick={selectThread} style={{width: 'fit-content', margin: '0px auto', cursor:"pointer", zIndex:100}}>
+                    Enter Site
+                </Button>
+            </div>
+        </div>
     </React.Fragment>
     )
 }

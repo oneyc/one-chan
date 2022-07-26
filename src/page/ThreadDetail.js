@@ -25,6 +25,7 @@ const TemplatePage = (props) => {
         getThreads()
         getReplies()
     },[])
+    
     useEffect(()=> {
         const submitData = async() => {
             const userReplyRef = doc(db, "threads/", params.threadId, "/replies/", makeid(20))
